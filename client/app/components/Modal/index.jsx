@@ -42,6 +42,7 @@ export class Modal extends React.Component<Props, State> {
             id="modalTitle"
             className={css.modalBoxHeaderTitle}
             aria-label={title}
+            onKeyDown={this.toggleOpen}
           >
             {title}
           </div>
@@ -83,19 +84,24 @@ export class Modal extends React.Component<Props, State> {
     </div>
   );
 
-  toggleOpen = () => {
+  toggleOpen = (event) => {
     const { open } = this.state;
     const { openListener } = this.props;
     const body = ((document.body: any): HTMLBodyElement);
     if (!open) {
       body.classList.add('bodyModalOpen');
     } else {
-      body.classList.remove('bodyModalOpen');
+      if (event.key === 'Escape' || event.type === 'click') {
+        debugger;
+        body.classList.remove('bodyModalOpen');
+      }
     }
     if (!open && openListener) {
       openListener();
     }
-    this.setState({ open: !open });
+    if (event.key === 'Escape' || event.type === 'click') {
+      this.setState({ open: !open });
+    }
   };
 
   resolveElement = () => {
